@@ -1,0 +1,34 @@
+name: Daily Signals
+
+on:
+  schedule:
+    - cron: '0 22 * * 1-5'   # 22:00 UTC lunes-viernes (cierre NYSE ~21:00 UTC)
+  workflow_dispatch:           # disparo manual para pruebas
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Generar señales del día
+        run: python generate_signals.py
+
+      - name: Commit y push si hay cambios
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/data/signals_live.json
+          git diff --staged --quiet || git commit -m "signals: $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git push

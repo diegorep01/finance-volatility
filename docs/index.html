@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finance Volatility Check</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #080d17;
+      --surface:   #0f1623;
+      --card:      #141d2e;
+      --border:    #1e2d45;
+      --text:      #e8edf5;
+      --muted:     #6b7f9a;
+      --green:     #00d4aa;
+      --green-bg:  rgba(0,212,170,.08);
+      --red:       #ff4d6d;
+      --red-bg:    rgba(255,77,109,.08);
+      --blue:      #4da6ff;
+      --blue-bg:   rgba(77,166,255,.08);
+      --gold:      #ffd166;
+      --gold-bg:   rgba(255,209,102,.08);
+      --radius:    10px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* ── Layout ── */
+    .wrapper { max-width: 1100px; margin: 0 auto; padding: 28px 20px 60px; }
+
+    /* ── Header ── */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .logo-area h1 {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -.3px;
+    }
+    .logo-area h1 span { color: var(--blue); }
+    .logo-area p { color: var(--muted); font-size: 12px; margin-top: 2px; }
+    .update-badge {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 12px;
+      color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .update-badge span { color: var(--green); }
+
+    /* ── Stats bar ── */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+    }
+    .stat-card .label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .6px; }
+    .stat-card .value { font-size: 26px; font-weight: 700; margin-top: 4px; font-family: 'JetBrains Mono', monospace; }
+    .stat-card .sub   { color: var(--muted); font-size: 11px; margin-top: 2px; }
+    .c-green { color: var(--green); }
+    .c-red   { color: var(--red);   }
+    .c-blue  { color: var(--blue);  }
+    .c-gold  { color: var(--gold);  }
+    .c-muted { color: var(--muted); }
+
+    /* ── Section title ── */
+    .section-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── Signal cards ── */
+    .signals-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 14px;
+      margin-bottom: 36px;
+    }
+    .signal-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color .2s;
+    }
+    .signal-card:hover { border-color: var(--blue); }
+    .signal-card.strong { border-left: 3px solid var(--green); }
+    .signal-card.weak   { border-left: 3px solid var(--gold); }
+
+    .signal-card .glow {
+      position: absolute;
+      top: 0; right: 0;
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      opacity: .04;
+      filter: blur(40px);
+      pointer-events: none;
+    }
+    .signal-card.strong .glow { background: var(--green); }
+    .signal-card.weak   .glow { background: var(--gold);  }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+    .ticker-box .ticker { font-size: 22px; font-weight: 800; font-family: 'JetBrains Mono', monospace; }
+    .ticker-box .tipo   { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    .prob-circle {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .prob-circle .pct {
+      font-size: 22px;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .prob-circle .plabel { font-size: 10px; color: var(--muted); margin-top: 1px; }
+
+    .ret-big {
+      font-size: 32px;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--red);
+      margin-bottom: 4px;
+    }
+    .ret-sub { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+
+    /* Barra de probabilidad */
+    .prob-bar-wrap { margin-bottom: 16px; }
+    .prob-bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+    .prob-bar-bg {
+      background: var(--border);
+      border-radius: 4px;
+      height: 6px;
+      overflow: hidden;
+    }
+    .prob-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width .5s ease;
+    }
+    .fill-green { background: linear-gradient(90deg, #00b894, var(--green)); }
+    .fill-gold  { background: linear-gradient(90deg, #e0a800, var(--gold)); }
+
+    /* Chips de info */
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chip {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .chip.sistematica { border-color: #4da6ff44; color: var(--blue); background: var(--blue-bg); }
+    .chip.idiosincrasica { border-color: #ffd16644; color: var(--gold); background: var(--gold-bg); }
+    .chip.señal { border-color: #00d4aa44; color: var(--green); background: var(--green-bg); }
+
+    /* Alerta mercado tranquilo */
+    .calm-market {
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 36px;
+    }
+    .calm-market .icon  { font-size: 36px; margin-bottom: 10px; }
+    .calm-market .title { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+
+    /* ── Tabla histórico ── */
+    .table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    thead tr { background: var(--card); border-bottom: 1px solid var(--border); }
+    th {
+      padding: 11px 14px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background .15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--card); }
+    td { padding: 11px 14px; font-size: 13px; }
+    td.mono { font-family: 'JetBrains Mono', monospace; }
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+    .badge-gano  { background: var(--green-bg); color: var(--green); border: 1px solid #00d4aa44; }
+    .badge-nogano{ background: var(--red-bg);   color: var(--red);   border: 1px solid #ff4d6d44; }
+    .badge-sis   { background: var(--blue-bg);  color: var(--blue);  border: 1px solid #4da6ff44; }
+    .badge-idio  { background: var(--gold-bg);  color: var(--gold);  border: 1px solid #ffd16644; }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 48px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 11px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    footer a { color: var(--blue); text-decoration: none; }
+
+    /* ── Loading/Error ── */
+    #loading {
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--muted);
+    }
+    .spinner {
+      width: 32px; height: 32px;
+      border: 3px solid var(--border);
+      border-top-color: var(--blue);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 600px) {
+      .signals-grid { grid-template-columns: 1fr; }
+      .ret-big { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+
+  <header>
+    <div class="logo-area">
+      <h1>Finance <span>Volatility</span> Check</h1>
+      <p>Detección de caídas anómalas con ML — 26 activos monitorizados</p>
+    </div>
+    <div class="update-badge" id="update-badge">Cargando...</div>
+  </header>
+
+  <div id="loading">
+    <div class="spinner"></div>
+    Cargando señales...
+  </div>
+
+  <div id="app" style="display:none">
+
+    <!-- Stats bar -->
+    <div class="stats-bar" id="stats-bar"></div>
+
+    <!-- Señales de hoy -->
+    <div class="section-title">Señales activas hoy</div>
+    <div id="signals-section"></div>
+
+    <!-- Histórico -->
+    <div class="section-title">Historial reciente (últimas 30 señales)</div>
+    <div class="table-wrap" style="overflow-x:auto">
+      <table style="min-width:860px">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Ticker</th>
+            <th>Caída</th>
+            <th>Tipo</th>
+            <th>Prob.</th>
+            <th>P. caída</th>
+            <th>P. día 10</th>
+            <th>P. día 20</th>
+            <th>P. día 30</th>
+            <th>Resultado</th>
+          </tr>
+        </thead>
+        <tbody id="history-body"></tbody>
+      </table>
+    </div>
+
+  </div><!-- /app -->
+
+  <footer>
+    <span>Finance Volatility Check &mdash; Modelo XGBoost entrenado sobre 1.253 eventos (2015&ndash;2026)</span>
+    <span>Umbral de señal: prob &ge; 0.55 &rarr; +3.34% medio a 10d</span>
+  </footer>
+
+</div><!-- /wrapper -->
+
+<script>
+  const DATA_URL = './data/signals_live.json';
+
+  function fmt(n, decimals = 2, sign = false) {
+    if (n === null || n === undefined) return '—';
+    const s = Number(n).toFixed(decimals);
+    return sign && n > 0 ? '+' + s : s;
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return '—';
+    const [y, m, d] = iso.split('-');
+    return `${d}/${m}/${y}`;
+  }
+
+  function probColor(prob) {
+    return prob >= 0.55 ? 'fill-green' : 'fill-gold';
+  }
+
+  function renderStats(data) {
+    const spy = data.spy_ret_hoy;
+    const spyColor = spy >= 0 ? 'c-green' : 'c-red';
+    const spySign = spy >= 0 ? '+' : '';
+
+    const html = `
+      <div class="stat-card">
+        <div class="label">Fecha de mercado</div>
+        <div class="value c-blue">${fmtDate(data.market_date)}</div>
+        <div class="sub">último cierre disponible</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">SPY hoy</div>
+        <div class="value ${spyColor}">${spySign}${fmt(spy)}%</div>
+        <div class="sub">retorno diario S&amp;P 500</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Señales activas</div>
+        <div class="value ${data.stats.señales_fuertes > 0 ? 'c-gold' : 'c-muted'}">${data.stats.señales_fuertes}</div>
+        <div class="sub">de ${data.stats.tickers_analizados} activos monitorizados</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Umbral del modelo</div>
+        <div class="value c-green">${(data.prob_umbral * 100).toFixed(0)}%</div>
+        <div class="sub">prob. mínima para señal</div>
+      </div>
+    `;
+    document.getElementById('stats-bar').innerHTML = html;
+  }
+
+  function renderSignals(signals) {
+    const container = document.getElementById('signals-section');
+
+    if (!signals || signals.length === 0) {
+      container.innerHTML = `
+        <div class="calm-market">
+          <div class="icon">&#x1F7E2;</div>
+          <div class="title">Mercado tranquilo hoy</div>
+          <p>Ningún activo registró una caída anómala en el último cierre.<br>
+             El algoritmo escanea las ${26} posiciones cada día al cierre del mercado.</p>
+        </div>
+      `;
+      return;
+    }
+
+    const cards = signals.map(s => {
+      const isStrong = s.recomendacion === 'SEÑAL';
+      const cardClass = isStrong ? 'strong' : 'weak';
+      const fillClass = probColor(s.prob);
+      const probPct   = (s.prob * 100).toFixed(1);
+      const tipoClass = s.es_sistematico ? 'sistematica' : 'idiosincrasica';
+      const tipoLabel = s.es_sistematico ? '&#x26A1; Sistémica' : '&#x1F3AF; Idiosincrásica';
+
+      return `
+        <div class="signal-card ${cardClass}">
+          <div class="glow"></div>
+          <div class="card-top">
+            <div class="ticker-box">
+              <div class="ticker">${s.ticker}</div>
+              <div class="tipo">$${fmt(s.precio_cierre, 2)} cierre</div>
+            </div>
+            <div class="prob-circle">
+              <div class="pct ${isStrong ? 'c-green' : 'c-gold'}">${probPct}%</div>
+              <div class="plabel">prob. rebote</div>
+            </div>
+          </div>
+
+          <div class="ret-big">${fmt(s.ret_1d, 2, true)}%</div>
+          <div class="ret-sub">caída en 1 día &nbsp;|&nbsp; z-score: ${fmt(s.zscore, 2)}</div>
+
+          <div class="prob-bar-wrap">
+            <div class="prob-bar-label">
+              <span>Prob. +1% en 10 días</span>
+              <span>${isStrong ? '&#x2713; Por encima del umbral' : 'Por debajo del umbral'}</span>
+            </div>
+            <div class="prob-bar-bg">
+              <div class="prob-bar-fill ${fillClass}" style="width:${probPct}%"></div>
+            </div>
+          </div>
+
+          <div class="chips">
+            <div class="chip ${tipoClass}">${tipoLabel}</div>
+            ${isStrong ? '<div class="chip señal">SEÑAL ACTIVA</div>' : ''}
+            ${s.rsi_14 ? `<div class="chip">RSI ${fmt(s.rsi_14, 0)}</div>` : ''}
+            ${s.dist_low_52w !== null ? `<div class="chip">+${fmt(s.dist_low_52w, 1)}% vs mín. 52s</div>` : ''}
+            ${s.spy_ret !== null ? `<div class="chip">SPY ${fmt(s.spy_ret, 2, true)}%</div>` : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    container.innerHTML = `<div class="signals-grid">${cards}</div>`;
+  }
+
+  function fmtPrecio(p) {
+    if (p === null || p === undefined) return '<span style="color:var(--muted)">—</span>';
+    return `$${Number(p).toFixed(2)}`;
+  }
+
+  function precioColor(p0, pn) {
+    if (p0 === null || pn === null) return '';
+    return pn >= p0 ? 'c-green' : 'c-red';
+  }
+
+  function renderHistory(historico) {
+    const tbody = document.getElementById('history-body');
+    if (!historico || historico.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="10" style="color:var(--muted);text-align:center;padding:24px">Sin datos históricos</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = historico.map(h => {
+      const gano     = h.resultado === 'Ganó';
+      const tipoBadge = h.es_sistematico
+        ? '<span class="badge badge-sis">Sistémica</span>'
+        : '<span class="badge badge-idio">Idiosincrásica</span>';
+      const retColor10  = h.ret_10d >= 1 ? 'c-green' : 'c-red';
+      const resultBadge = gano
+        ? `<span class="badge badge-gano">&#x2197; Ganó</span> <span class="mono ${retColor10}" style="font-size:12px">${fmt(h.ret_10d, 2, true)}%</span>`
+        : `<span class="badge badge-nogano">&#x2198; No ganó</span> <span class="mono ${retColor10}" style="font-size:12px">${fmt(h.ret_10d, 2, true)}%</span>`;
+
+      const p0  = h.precio_caida;
+      const p10 = h.precio_10d;
+      const p20 = h.precio_20d;
+      const p30 = h.precio_30d;
+
+      return `
+        <tr>
+          <td class="mono c-muted">${fmtDate(h.fecha)}</td>
+          <td class="mono" style="font-weight:600">${h.ticker}</td>
+          <td class="mono c-red">${fmt(h.ret_1d, 2, true)}%</td>
+          <td>${tipoBadge}</td>
+          <td class="mono">${(h.prob * 100).toFixed(1)}%</td>
+          <td class="mono">${fmtPrecio(p0)}</td>
+          <td class="mono ${precioColor(p0, p10)}">${fmtPrecio(p10)}</td>
+          <td class="mono ${precioColor(p0, p20)}">${fmtPrecio(p20)}</td>
+          <td class="mono ${precioColor(p0, p30)}">${fmtPrecio(p30)}</td>
+          <td>${resultBadge}</td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function renderUpdateBadge(generatedAt) {
+    const d    = new Date(generatedAt);
+    const hora = d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' });
+    const dia  = d.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' });
+    document.getElementById('update-badge').innerHTML =
+      `Actualizado <span>${dia} ${hora} UTC</span>`;
+  }
+
+  async function init() {
+    try {
+      const res  = await fetch(DATA_URL);
+      if (!res.ok) throw new Error('No se pudo cargar el JSON');
+      const data = await res.json();
+
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('app').style.display     = 'block';
+
+      renderUpdateBadge(data.generated_at);
+      renderStats(data);
+      renderSignals(data.signals);
+      renderHistory(data.historico);
+
+    } catch (err) {
+      document.getElementById('loading').innerHTML = `
+        <div style="color:var(--red)">
+          <div style="font-size:32px;margin-bottom:12px">&#x26A0;</div>
+          <div>Error al cargar los datos</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:6px">${err.message}</div>
+        </div>
+      `;
+    }
+  }
+
+  init();
+</script>
+</body>
+</html>
