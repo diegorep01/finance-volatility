@@ -5,6 +5,9 @@ on:
     - cron: '0 22 * * 1-5'   # 22:00 UTC lunes-viernes (cierre NYSE ~21:00 UTC)
   workflow_dispatch:           # disparo manual para pruebas
 
+permissions:
+  contents: write
+
 jobs:
   generate:
     runs-on: ubuntu-latest
