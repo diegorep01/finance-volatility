@@ -28,6 +28,12 @@ jobs:
       - name: Generar señales del día
         run: python generate_signals.py
 
+      - name: Enviar alerta por email si hay señales fuertes
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+        run: python send_alert.py
+
       - name: Commit y push si hay cambios
         run: |
           git config user.name  "github-actions[bot]"
