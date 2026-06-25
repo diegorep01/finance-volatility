@@ -1,29 +1,29 @@
 {
-  "generated_at": "2026-06-24T18:43:11Z",
-  "market_date": "2026-06-24",
-  "spy_ret_hoy": -0.037,
+  "generated_at": "2026-06-25T20:54:21Z",
+  "market_date": "2026-06-25",
+  "spy_ret_hoy": 0.145,
   "prob_umbral": 0.55,
   "stats": {
     "tickers_analizados": 26,
     "señales_hoy": 1,
-    "señales_fuertes": 1
+    "señales_fuertes": 0
   },
   "signals": [
     {
-      "ticker": "SLV",
-      "fecha": "2026-06-24",
-      "ret_1d": -7.761,
-      "zscore": -2.18,
-      "prob": 0.706,
+      "ticker": "AAPL",
+      "fecha": "2026-06-25",
+      "ret_1d": -6.118,
+      "zscore": -3.757,
+      "prob": 0.448,
       "es_sistematico": 0,
       "tipo_caida": "Idiosincrásica",
-      "idio_ret": -7.724,
-      "dist_low_52w": 57.64,
-      "rsi_14": 26.8,
-      "spy_ret": -0.037,
-      "precio_cierre": 51.4,
+      "idio_ret": -6.262,
+      "dist_low_52w": 37.43,
+      "rsi_14": 32.2,
+      "spy_ret": 0.145,
+      "precio_cierre": 275.15,
       "mag_ord": 3,
-      "recomendacion": "SEÑAL"
+      "recomendacion": "Débil"
     }
   ],
   "historico": [
