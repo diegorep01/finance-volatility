@@ -1,29 +1,29 @@
 {
-  "generated_at": "2026-06-25T23:15:14Z",
-  "market_date": "2026-06-25",
-  "spy_ret_hoy": 0.145,
+  "generated_at": "2026-06-26T23:03:55Z",
+  "market_date": "2026-06-26",
+  "spy_ret_hoy": -0.723,
   "prob_umbral": 0.55,
   "stats": {
     "tickers_analizados": 26,
     "señales_hoy": 1,
-    "señales_fuertes": 0
+    "señales_fuertes": 1
   },
   "signals": [
     {
-      "ticker": "AAPL",
-      "fecha": "2026-06-25",
-      "ret_1d": -6.118,
-      "zscore": -3.757,
-      "prob": 0.448,
+      "ticker": "GS",
+      "fecha": "2026-06-26",
+      "ret_1d": -4.27,
+      "zscore": -2.277,
+      "prob": 0.615,
       "es_sistematico": 0,
       "tipo_caida": "Idiosincrásica",
-      "idio_ret": -6.262,
-      "dist_low_52w": 37.43,
-      "rsi_14": 32.2,
-      "spy_ret": 0.145,
-      "precio_cierre": 275.15,
-      "mag_ord": 3,
-      "recomendacion": "Débil"
+      "idio_ret": -3.547,
+      "dist_low_52w": 51.37,
+      "rsi_14": 46.3,
+      "spy_ret": -0.723,
+      "precio_cierre": 1019.61,
+      "mag_ord": 2,
+      "recomendacion": "SEÑAL"
     }
   ],
   "historico": [
