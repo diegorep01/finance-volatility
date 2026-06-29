@@ -1,31 +1,14 @@
 {
-  "generated_at": "2026-06-26T23:03:55Z",
-  "market_date": "2026-06-26",
-  "spy_ret_hoy": -0.723,
+  "generated_at": "2026-06-29T22:53:56Z",
+  "market_date": "2026-06-29",
+  "spy_ret_hoy": 1.647,
   "prob_umbral": 0.55,
   "stats": {
     "tickers_analizados": 26,
-    "señales_hoy": 1,
-    "señales_fuertes": 1
+    "señales_hoy": 0,
+    "señales_fuertes": 0
   },
-  "signals": [
-    {
-      "ticker": "GS",
-      "fecha": "2026-06-26",
-      "ret_1d": -4.27,
-      "zscore": -2.277,
-      "prob": 0.615,
-      "es_sistematico": 0,
-      "tipo_caida": "Idiosincrásica",
-      "idio_ret": -3.547,
-      "dist_low_52w": 51.37,
-      "rsi_14": 46.3,
-      "spy_ret": -0.723,
-      "precio_cierre": 1019.61,
-      "mag_ord": 2,
-      "recomendacion": "SEÑAL"
-    }
-  ],
+  "signals": [],
   "historico": [
     {
       "ticker": "QQQ",
