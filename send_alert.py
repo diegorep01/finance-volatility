@@ -47,7 +47,7 @@ def construir_cuerpo(data: dict) -> str:
 
     lineas += [
         "---",
-        "Estrategia: comprar si prob >= 0.55, horizonte 10 días hábiles.",
+        "Estrategia ganadora: caída < -4.5%, Z < -2.0, horizonte 10 días hábiles.",
         "Dashboard:  https://diegorep01.github.io/finance-volatility/",
     ]
 
