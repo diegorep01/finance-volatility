@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-29T22:53:56Z",
-  "market_date": "2026-06-29",
-  "spy_ret_hoy": 1.647,
+  "generated_at": "2026-06-30T23:08:46Z",
+  "market_date": "2026-06-30",
+  "spy_ret_hoy": 0.779,
   "prob_umbral": 0.55,
   "stats": {
     "tickers_analizados": 26,
@@ -133,7 +133,7 @@
       "resultado": "No ganó",
       "precio_caida": 261.26,
       "precio_10d": 246.02,
-      "precio_20d": null,
+      "precio_20d": 238.34,
       "precio_30d": null
     },
     {
@@ -176,7 +176,7 @@
       "precio_caida": 69.04,
       "precio_10d": 67.67,
       "precio_20d": 63.47,
-      "precio_30d": null
+      "precio_30d": 53.47
     },
     {
       "ticker": "XOM",
