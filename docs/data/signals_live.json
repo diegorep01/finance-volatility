@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-30T23:08:46Z",
-  "market_date": "2026-06-30",
-  "spy_ret_hoy": 0.779,
+  "generated_at": "2026-07-01T23:11:46Z",
+  "market_date": "2026-07-01",
+  "spy_ret_hoy": -0.135,
   "prob_umbral": 0.55,
   "stats": {
     "tickers_analizados": 26,
@@ -119,7 +119,7 @@
       "resultado": "No ganó",
       "precio_caida": 441.31,
       "precio_10d": 393.83,
-      "precio_20d": null,
+      "precio_20d": 384.28,
       "precio_30d": null
     },
     {
