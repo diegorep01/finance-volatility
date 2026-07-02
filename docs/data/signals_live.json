@@ -1,14 +1,31 @@
 {
-  "generated_at": "2026-07-01T23:11:46Z",
-  "market_date": "2026-07-01",
-  "spy_ret_hoy": -0.135,
+  "generated_at": "2026-07-02T23:02:02Z",
+  "market_date": "2026-07-02",
+  "spy_ret_hoy": -0.131,
   "prob_umbral": 0.55,
   "stats": {
     "tickers_analizados": 26,
-    "señales_hoy": 0,
+    "señales_hoy": 1,
     "señales_fuertes": 0
   },
-  "signals": [],
+  "signals": [
+    {
+      "ticker": "TSLA",
+      "fecha": "2026-07-02",
+      "ret_1d": -7.489,
+      "zscore": -2.54,
+      "prob": 0.45,
+      "es_sistematico": 0,
+      "tipo_caida": "Idiosincrásica",
+      "idio_ret": -7.357,
+      "dist_low_52w": 33.85,
+      "rsi_14": 46.8,
+      "spy_ret": -0.131,
+      "precio_cierre": 393.45,
+      "mag_ord": 3,
+      "recomendacion": "Débil"
+    }
+  ],
   "historico": [
     {
       "ticker": "QQQ",
