@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T23:02:02Z",
+  "generated_at": "2026-07-03T22:59:07Z",
   "market_date": "2026-07-02",
   "spy_ret_hoy": -0.131,
   "prob_umbral": 0.55,
@@ -14,7 +14,7 @@
       "fecha": "2026-07-02",
       "ret_1d": -7.489,
       "zscore": -2.54,
-      "prob": 0.45,
+      "prob": 0.451,
       "es_sistematico": 0,
       "tipo_caida": "Idiosincrásica",
       "idio_ret": -7.357,
