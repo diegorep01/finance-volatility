@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-06T23:04:09Z",
-  "market_date": "2026-07-06",
-  "spy_ret_hoy": 0.873,
+  "generated_at": "2026-07-07T22:58:04Z",
+  "market_date": "2026-07-07",
+  "spy_ret_hoy": -0.475,
   "prob_umbral": 0.55,
   "stats": {
     "tickers_analizados": 26,
@@ -21,7 +21,7 @@
       "resultado": "Ganó",
       "precio_caida": 704.29,
       "precio_10d": 737.95,
-      "precio_20d": null,
+      "precio_20d": 709.43,
       "precio_30d": null
     },
     {
@@ -35,7 +35,7 @@
       "resultado": "Ganó",
       "precio_caida": 180.09,
       "precio_10d": 192.15,
-      "precio_20d": null,
+      "precio_20d": 179.18,
       "precio_30d": null
     },
     {
@@ -49,7 +49,7 @@
       "resultado": "Ganó",
       "precio_caida": 280.98,
       "precio_10d": 298.18,
-      "precio_20d": null,
+      "precio_20d": 296.19,
       "precio_30d": null
     },
     {
@@ -63,7 +63,7 @@
       "resultado": "Ganó",
       "precio_caida": 391.0,
       "precio_10d": 405.05,
-      "precio_20d": null,
+      "precio_20d": 402.9,
       "precio_30d": null
     },
     {
@@ -77,7 +77,7 @@
       "resultado": "Ganó",
       "precio_caida": 205.1,
       "precio_10d": 208.65,
-      "precio_20d": null,
+      "precio_20d": 196.93,
       "precio_30d": null
     },
     {
@@ -91,7 +91,7 @@
       "resultado": "No ganó",
       "precio_caida": 61.57,
       "precio_10d": 58.91,
-      "precio_20d": null,
+      "precio_20d": 54.46,
       "precio_30d": null
     },
     {
@@ -105,7 +105,7 @@
       "resultado": "Ganó",
       "precio_caida": 1038.68,
       "precio_10d": 1106.37,
-      "precio_20d": null,
+      "precio_20d": 1042.98,
       "precio_30d": null
     },
     {
@@ -148,7 +148,7 @@
       "precio_caida": 121.34,
       "precio_10d": 118.88,
       "precio_20d": 117.18,
-      "precio_30d": null
+      "precio_30d": 111.54
     },
     {
       "ticker": "XOM",
