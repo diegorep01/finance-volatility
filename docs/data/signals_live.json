@@ -1,31 +1,14 @@
 {
-  "generated_at": "2026-07-09T23:08:41Z",
-  "market_date": "2026-07-09",
-  "spy_ret_hoy": 0.847,
+  "generated_at": "2026-07-10T22:57:44Z",
+  "market_date": "2026-07-10",
+  "spy_ret_hoy": 0.431,
   "prob_umbral": 0.55,
   "stats": {
     "tickers_analizados": 26,
-    "señales_hoy": 1,
+    "señales_hoy": 0,
     "señales_fuertes": 0
   },
-  "signals": [
-    {
-      "ticker": "UNG",
-      "fecha": "2026-07-09",
-      "ret_1d": -6.638,
-      "zscore": -2.668,
-      "prob": 0.321,
-      "es_sistematico": 0,
-      "tipo_caida": "Idiosincrásica",
-      "idio_ret": -7.484,
-      "dist_low_52w": 6.7,
-      "rsi_14": 38.8,
-      "spy_ret": 0.847,
-      "precio_cierre": 10.83,
-      "mag_ord": 3,
-      "recomendacion": "Débil"
-    }
-  ],
+  "signals": [],
   "historico": [
     {
       "ticker": "QQQ",
