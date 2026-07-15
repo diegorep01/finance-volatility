@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-14T22:55:33Z",
-  "market_date": "2026-07-14",
-  "spy_ret_hoy": 0.355,
+  "generated_at": "2026-07-15T22:56:26Z",
+  "market_date": "2026-07-15",
+  "spy_ret_hoy": 0.396,
   "prob_umbral": 0.55,
   "stats": {
     "tickers_analizados": 26,
@@ -134,7 +134,7 @@
       "precio_caida": 261.26,
       "precio_10d": 246.02,
       "precio_20d": 238.34,
-      "precio_30d": null
+      "precio_30d": 254.96
     },
     {
       "ticker": "WMT",
