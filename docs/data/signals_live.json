@@ -1,14 +1,31 @@
 {
-  "generated_at": "2026-07-15T22:56:26Z",
-  "market_date": "2026-07-15",
-  "spy_ret_hoy": 0.396,
+  "generated_at": "2026-07-16T22:54:50Z",
+  "market_date": "2026-07-16",
+  "spy_ret_hoy": -0.542,
   "prob_umbral": 0.55,
   "stats": {
     "tickers_analizados": 26,
-    "señales_hoy": 0,
-    "señales_fuertes": 0
+    "señales_hoy": 1,
+    "señales_fuertes": 1
   },
-  "signals": [],
+  "signals": [
+    {
+      "ticker": "GS",
+      "fecha": "2026-07-16",
+      "ret_1d": -4.914,
+      "zscore": -2.212,
+      "prob": 0.573,
+      "es_sistematico": 0,
+      "tipo_caida": "Idiosincrásica",
+      "idio_ret": -4.372,
+      "dist_low_52w": 59.55,
+      "rsi_14": 56.7,
+      "spy_ret": -0.542,
+      "precio_cierre": 1095.46,
+      "mag_ord": 2,
+      "recomendacion": "SEÑAL"
+    }
+  ],
   "historico": [
     {
       "ticker": "QQQ",
@@ -120,7 +137,7 @@
       "precio_caida": 441.31,
       "precio_10d": 393.83,
       "precio_20d": 384.28,
-      "precio_30d": null
+      "precio_30d": 401.1
     },
     {
       "ticker": "AMZN",
