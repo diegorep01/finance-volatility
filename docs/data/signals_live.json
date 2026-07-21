@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-20T22:57:22Z",
-  "market_date": "2026-07-20",
-  "spy_ret_hoy": -0.161,
+  "generated_at": "2026-07-21T22:53:24Z",
+  "market_date": "2026-07-21",
+  "spy_ret_hoy": 0.834,
   "prob_umbral": 0.55,
   "stats": {
     "tickers_analizados": 26,
@@ -22,7 +22,7 @@
       "precio_caida": 704.29,
       "precio_10d": 737.95,
       "precio_20d": 709.43,
-      "precio_30d": null
+      "precio_30d": 708.97
     },
     {
       "ticker": "XLK",
@@ -36,7 +36,7 @@
       "precio_caida": 180.09,
       "precio_10d": 192.15,
       "precio_20d": 179.18,
-      "precio_30d": null
+      "precio_30d": 180.78
     },
     {
       "ticker": "IWM",
@@ -50,7 +50,7 @@
       "precio_caida": 280.98,
       "precio_10d": 298.18,
       "precio_20d": 296.19,
-      "precio_30d": null
+      "precio_30d": 296.54
     },
     {
       "ticker": "TSLA",
@@ -64,7 +64,7 @@
       "precio_caida": 391.0,
       "precio_10d": 405.05,
       "precio_20d": 402.9,
-      "precio_30d": null
+      "precio_30d": 378.93
     },
     {
       "ticker": "NVDA",
@@ -78,7 +78,7 @@
       "precio_caida": 205.1,
       "precio_10d": 208.65,
       "precio_20d": 196.93,
-      "precio_30d": null
+      "precio_30d": 207.29
     },
     {
       "ticker": "SLV",
@@ -92,7 +92,7 @@
       "precio_caida": 61.57,
       "precio_10d": 58.91,
       "precio_20d": 54.46,
-      "precio_30d": null
+      "precio_30d": 53.08
     },
     {
       "ticker": "GS",
@@ -106,7 +106,7 @@
       "precio_caida": 1038.68,
       "precio_10d": 1106.37,
       "precio_20d": 1042.98,
-      "precio_30d": null
+      "precio_30d": 1085.56
     },
     {
       "ticker": "MSFT",
