@@ -1,14 +1,63 @@
 {
-  "generated_at": "2026-07-22T22:59:07Z",
-  "market_date": "2026-07-22",
-  "spy_ret_hoy": -0.116,
+  "generated_at": "2026-07-23T22:53:08Z",
+  "market_date": "2026-07-23",
+  "spy_ret_hoy": -1.235,
   "prob_umbral": 0.55,
   "stats": {
     "tickers_analizados": 26,
-    "señales_hoy": 0,
-    "señales_fuertes": 0
+    "señales_hoy": 3,
+    "señales_fuertes": 2
   },
-  "signals": [],
+  "signals": [
+    {
+      "ticker": "GOOGL",
+      "fecha": "2026-07-23",
+      "ret_1d": -7.133,
+      "zscore": -2.826,
+      "prob": 0.646,
+      "es_sistematico": 1,
+      "tipo_caida": "Sistémica",
+      "idio_ret": -5.898,
+      "dist_low_52w": 68.45,
+      "rsi_14": 31.0,
+      "spy_ret": -1.235,
+      "precio_cierre": 317.69,
+      "mag_ord": 3,
+      "recomendacion": "SEÑAL"
+    },
+    {
+      "ticker": "TSLA",
+      "fecha": "2026-07-23",
+      "ret_1d": -14.524,
+      "zscore": -3.962,
+      "prob": 0.572,
+      "es_sistematico": 1,
+      "tipo_caida": "Sistémica",
+      "idio_ret": -13.289,
+      "dist_low_52w": 5.64,
+      "rsi_14": 29.1,
+      "spy_ret": -1.235,
+      "precio_cierre": 319.69,
+      "mag_ord": 4,
+      "recomendacion": "SEÑAL"
+    },
+    {
+      "ticker": "AMZN",
+      "fecha": "2026-07-23",
+      "ret_1d": -4.57,
+      "zscore": -2.365,
+      "prob": 0.427,
+      "es_sistematico": 1,
+      "tipo_caida": "Sistémica",
+      "idio_ret": -3.335,
+      "dist_low_52w": 17.54,
+      "rsi_14": 38.6,
+      "spy_ret": -1.235,
+      "precio_cierre": 233.66,
+      "mag_ord": 2,
+      "recomendacion": "Débil"
+    }
+  ],
   "historico": [
     {
       "ticker": "QQQ",
