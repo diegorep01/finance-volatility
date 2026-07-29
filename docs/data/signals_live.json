@@ -1,14 +1,31 @@
 {
-  "generated_at": "2026-07-28T22:55:18Z",
-  "market_date": "2026-07-28",
-  "spy_ret_hoy": 0.239,
+  "generated_at": "2026-07-29T22:57:38Z",
+  "market_date": "2026-07-29",
+  "spy_ret_hoy": -1.539,
   "prob_umbral": 0.55,
   "stats": {
     "tickers_analizados": 26,
-    "señales_hoy": 0,
+    "señales_hoy": 1,
     "señales_fuertes": 0
   },
-  "signals": [],
+  "signals": [
+    {
+      "ticker": "GS",
+      "fecha": "2026-07-29",
+      "ret_1d": -5.089,
+      "zscore": -2.093,
+      "prob": 0.546,
+      "es_sistematico": 1,
+      "tipo_caida": "Sistémica",
+      "idio_ret": -3.551,
+      "dist_low_52w": 41.0,
+      "rsi_14": 37.7,
+      "spy_ret": -1.539,
+      "precio_cierre": 980.75,
+      "mag_ord": 3,
+      "recomendacion": "Débil"
+    }
+  ],
   "historico": [
     {
       "ticker": "QQQ",
