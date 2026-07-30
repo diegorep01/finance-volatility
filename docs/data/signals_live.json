@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-29T22:57:38Z",
-  "market_date": "2026-07-29",
-  "spy_ret_hoy": -1.539,
+  "generated_at": "2026-07-30T23:02:34Z",
+  "market_date": "2026-07-30",
+  "spy_ret_hoy": 1.677,
   "prob_umbral": 0.55,
   "stats": {
     "tickers_analizados": 26,
@@ -10,18 +10,18 @@
   },
   "signals": [
     {
-      "ticker": "GS",
-      "fecha": "2026-07-29",
-      "ret_1d": -5.089,
-      "zscore": -2.093,
-      "prob": 0.546,
-      "es_sistematico": 1,
-      "tipo_caida": "Sistémica",
-      "idio_ret": -3.551,
-      "dist_low_52w": 41.0,
-      "rsi_14": 37.7,
-      "spy_ret": -1.539,
-      "precio_cierre": 980.75,
+      "ticker": "META",
+      "fecha": "2026-07-30",
+      "ret_1d": -7.954,
+      "zscore": -2.731,
+      "prob": 0.483,
+      "es_sistematico": 0,
+      "tipo_caida": "Idiosincrásica",
+      "idio_ret": -9.631,
+      "dist_low_52w": 2.63,
+      "rsi_14": 32.1,
+      "spy_ret": 1.677,
+      "precio_cierre": 539.03,
       "mag_ord": 3,
       "recomendacion": "Débil"
     }
