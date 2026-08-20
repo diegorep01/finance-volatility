@@ -1,14 +1,31 @@
 {
-  "generated_at": "2026-08-19T22:20:48Z",
-  "market_date": "2026-08-19",
-  "spy_ret_hoy": 0.21,
+  "generated_at": "2026-08-20T22:22:45Z",
+  "market_date": "2026-08-20",
+  "spy_ret_hoy": -0.84,
   "prob_umbral": 0.55,
   "stats": {
     "tickers_analizados": 26,
-    "señales_hoy": 0,
+    "señales_hoy": 1,
     "señales_fuertes": 0
   },
-  "signals": [],
+  "signals": [
+    {
+      "ticker": "WMT",
+      "fecha": "2026-08-20",
+      "ret_1d": -9.151,
+      "zscore": -4.891,
+      "prob": 0.392,
+      "es_sistematico": 0,
+      "tipo_caida": "Idiosincrásica",
+      "idio_ret": -8.311,
+      "dist_low_52w": 8.76,
+      "rsi_14": 29.8,
+      "spy_ret": -0.84,
+      "precio_cierre": 103.84,
+      "mag_ord": 3,
+      "recomendacion": "Débil"
+    }
+  ],
   "historico": [
     {
       "ticker": "QQQ",
