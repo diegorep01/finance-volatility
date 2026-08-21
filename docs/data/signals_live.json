@@ -1,31 +1,14 @@
 {
-  "generated_at": "2026-08-20T22:22:45Z",
-  "market_date": "2026-08-20",
-  "spy_ret_hoy": -0.84,
+  "generated_at": "2026-08-21T22:19:39Z",
+  "market_date": "2026-08-21",
+  "spy_ret_hoy": 0.409,
   "prob_umbral": 0.55,
   "stats": {
     "tickers_analizados": 26,
-    "señales_hoy": 1,
+    "señales_hoy": 0,
     "señales_fuertes": 0
   },
-  "signals": [
-    {
-      "ticker": "WMT",
-      "fecha": "2026-08-20",
-      "ret_1d": -9.151,
-      "zscore": -4.891,
-      "prob": 0.392,
-      "es_sistematico": 0,
-      "tipo_caida": "Idiosincrásica",
-      "idio_ret": -8.311,
-      "dist_low_52w": 8.76,
-      "rsi_14": 29.8,
-      "spy_ret": -0.84,
-      "precio_cierre": 103.84,
-      "mag_ord": 3,
-      "recomendacion": "Débil"
-    }
-  ],
+  "signals": [],
   "historico": [
     {
       "ticker": "QQQ",
@@ -134,10 +117,10 @@
       "es_sistematico": 0,
       "tipo_caida": "Idiosincrásica",
       "resultado": "No ganó",
-      "precio_caida": 441.31,
-      "precio_10d": 393.83,
-      "precio_20d": 384.28,
-      "precio_30d": 401.1
+      "precio_caida": 440.48,
+      "precio_10d": 393.09,
+      "precio_20d": 383.56,
+      "precio_30d": 400.35
     },
     {
       "ticker": "AMZN",
@@ -246,10 +229,10 @@
       "es_sistematico": 0,
       "tipo_caida": "Idiosincrásica",
       "resultado": "No ganó",
-      "precio_caida": 406.9,
-      "precio_10d": 408.55,
-      "precio_20d": 450.24,
-      "precio_30d": 390.74
+      "precio_caida": 406.13,
+      "precio_10d": 407.78,
+      "precio_20d": 449.39,
+      "precio_30d": 390.01
     },
     {
       "ticker": "USO",
