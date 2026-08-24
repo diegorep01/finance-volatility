@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-21T22:19:39Z",
-  "market_date": "2026-08-21",
-  "spy_ret_hoy": 0.409,
+  "generated_at": "2026-08-24T22:21:44Z",
+  "market_date": "2026-08-24",
+  "spy_ret_hoy": -0.294,
   "prob_umbral": 0.55,
   "stats": {
     "tickers_analizados": 26,
@@ -145,10 +145,10 @@
       "es_sistematico": 0,
       "tipo_caida": "Idiosincrásica",
       "resultado": "No ganó",
-      "precio_caida": 121.34,
-      "precio_10d": 118.88,
-      "precio_20d": 117.18,
-      "precio_30d": 111.54
+      "precio_caida": 121.05,
+      "precio_10d": 118.6,
+      "precio_20d": 116.9,
+      "precio_30d": 111.27
     },
     {
       "ticker": "XOM",
@@ -313,10 +313,10 @@
       "es_sistematico": 0,
       "tipo_caida": "Idiosincrásica",
       "resultado": "Ganó",
-      "precio_caida": 122.26,
-      "precio_10d": 129.35,
-      "precio_20d": 130.54,
-      "precio_30d": 134.2
+      "precio_caida": 121.96,
+      "precio_10d": 129.04,
+      "precio_20d": 130.23,
+      "precio_30d": 133.88
     },
     {
       "ticker": "TSLA",
