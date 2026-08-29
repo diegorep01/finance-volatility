@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-28T05:56:13Z",
-  "market_date": "2026-08-27",
-  "spy_ret_hoy": 0.655,
+  "generated_at": "2026-08-29T03:28:04Z",
+  "market_date": "2026-08-28",
+  "spy_ret_hoy": -0.227,
   "prob_umbral": 0.55,
   "stats": {
     "tickers_analizados": 26,
