@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-01T23:45:35Z",
-  "market_date": "2026-09-01",
-  "spy_ret_hoy": -0.687,
+  "generated_at": "2026-09-02T23:49:25Z",
+  "market_date": "2026-09-02",
+  "spy_ret_hoy": 0.444,
   "prob_umbral": 0.55,
   "stats": {
     "tickers_analizados": 26,
@@ -103,10 +103,10 @@
       "es_sistematico": 1,
       "tipo_caida": "Sistémica",
       "resultado": "Ganó",
-      "precio_caida": 1038.68,
-      "precio_10d": 1106.37,
-      "precio_20d": 1042.98,
-      "precio_30d": 1085.56
+      "precio_caida": 1033.62,
+      "precio_10d": 1100.98,
+      "precio_20d": 1037.9,
+      "precio_30d": 1080.27
     },
     {
       "ticker": "MSFT",
