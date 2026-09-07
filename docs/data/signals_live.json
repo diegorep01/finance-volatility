@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-04T23:40:47Z",
+  "generated_at": "2026-09-07T23:57:16Z",
   "market_date": "2026-09-04",
   "spy_ret_hoy": -0.385,
   "prob_umbral": 0.55,
@@ -383,10 +383,10 @@
       "es_sistematico": 1,
       "tipo_caida": "Sistémica",
       "resultado": "Ganó",
-      "precio_caida": 280.75,
-      "precio_10d": 317.05,
-      "precio_20d": 344.19,
-      "precio_30d": 400.56
+      "precio_caida": 280.57,
+      "precio_10d": 316.85,
+      "precio_20d": 343.97,
+      "precio_30d": 400.3
     },
     {
       "ticker": "META",
@@ -411,10 +411,10 @@
       "es_sistematico": 0,
       "tipo_caida": "Idiosincrásica",
       "resultado": "Ganó",
-      "precio_caida": 290.27,
-      "precio_10d": 317.13,
-      "precio_20d": 339.12,
-      "precio_30d": 397.8
+      "precio_caida": 290.08,
+      "precio_10d": 316.93,
+      "precio_20d": 338.9,
+      "precio_30d": 397.55
     },
     {
       "ticker": "USO",
