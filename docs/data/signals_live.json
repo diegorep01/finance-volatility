@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-10T23:40:26Z",
-  "market_date": "2026-09-10",
-  "spy_ret_hoy": -0.599,
+  "generated_at": "2026-09-11T23:51:35Z",
+  "market_date": "2026-09-11",
+  "spy_ret_hoy": 0.852,
   "prob_umbral": 0.55,
   "stats": {
     "tickers_analizados": 26,
@@ -75,10 +75,10 @@
       "es_sistematico": 1,
       "tipo_caida": "Sistémica",
       "resultado": "Ganó",
-      "precio_caida": 205.1,
-      "precio_10d": 208.65,
-      "precio_20d": 196.93,
-      "precio_30d": 207.29
+      "precio_caida": 204.87,
+      "precio_10d": 208.42,
+      "precio_20d": 196.71,
+      "precio_30d": 207.06
     },
     {
       "ticker": "SLV",
