@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-15T23:57:08Z",
-  "market_date": "2026-09-15",
-  "spy_ret_hoy": -0.459,
+  "generated_at": "2026-09-17T00:02:55Z",
+  "market_date": "2026-09-16",
+  "spy_ret_hoy": NaN,
   "prob_umbral": 0.55,
   "stats": {
     "tickers_analizados": 26,
@@ -47,10 +47,10 @@
       "es_sistematico": 1,
       "tipo_caida": "Sistémica",
       "resultado": "Ganó",
-      "precio_caida": 280.98,
-      "precio_10d": 298.18,
-      "precio_20d": 296.19,
-      "precio_30d": 296.54
+      "precio_caida": 280.25,
+      "precio_10d": 297.4,
+      "precio_20d": 295.42,
+      "precio_30d": 295.77
     },
     {
       "ticker": "TSLA",
