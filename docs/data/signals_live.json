@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-22T00:33:33Z",
-  "market_date": "2026-09-21",
-  "spy_ret_hoy": NaN,
+  "generated_at": "2026-09-22T23:58:33Z",
+  "market_date": "2026-09-22",
+  "spy_ret_hoy": -0.016,
   "prob_umbral": 0.55,
   "stats": {
     "tickers_analizados": 26,
@@ -19,10 +19,10 @@
       "es_sistematico": 1,
       "tipo_caida": "Sistémica",
       "resultado": "Ganó",
-      "precio_caida": 704.29,
-      "precio_10d": 737.95,
-      "precio_20d": 709.43,
-      "precio_30d": 708.97
+      "precio_caida": 703.55,
+      "precio_10d": 737.18,
+      "precio_20d": 708.69,
+      "precio_30d": 708.23
     },
     {
       "ticker": "XLK",
@@ -33,10 +33,10 @@
       "es_sistematico": 1,
       "tipo_caida": "Sistémica",
       "resultado": "Ganó",
-      "precio_caida": 180.09,
-      "precio_10d": 192.15,
-      "precio_20d": 179.18,
-      "precio_30d": 180.78
+      "precio_caida": 179.88,
+      "precio_10d": 191.93,
+      "precio_20d": 178.97,
+      "precio_30d": 180.57
     },
     {
       "ticker": "IWM",
@@ -201,10 +201,10 @@
       "es_sistematico": 0,
       "tipo_caida": "Idiosincrásica",
       "resultado": "Ganó",
-      "precio_caida": 56.59,
-      "precio_10d": 59.37,
-      "precio_20d": 58.33,
-      "precio_30d": 53.39
+      "precio_caida": 56.26,
+      "precio_10d": 59.02,
+      "precio_20d": 57.98,
+      "precio_30d": 53.07
     },
     {
       "ticker": "META",
@@ -215,10 +215,10 @@
       "es_sistematico": 0,
       "tipo_caida": "Idiosincrásica",
       "resultado": "Ganó",
-      "precio_caida": 611.34,
-      "precio_10d": 617.86,
-      "precio_20d": 631.92,
-      "precio_30d": 566.45
+      "precio_caida": 610.86,
+      "precio_10d": 617.37,
+      "precio_20d": 631.43,
+      "precio_30d": 566.01
     },
     {
       "ticker": "MSFT",
@@ -285,10 +285,10 @@
       "es_sistematico": 0,
       "tipo_caida": "Idiosincrásica",
       "resultado": "No ganó",
-      "precio_caida": 57.63,
-      "precio_10d": 56.14,
-      "precio_20d": 56.59,
-      "precio_30d": 59.37
+      "precio_caida": 57.29,
+      "precio_10d": 55.8,
+      "precio_20d": 56.26,
+      "precio_30d": 59.02
     },
     {
       "ticker": "XOM",
@@ -341,10 +341,10 @@
       "es_sistematico": 0,
       "tipo_caida": "Idiosincrásica",
       "resultado": "No ganó",
-      "precio_caida": 58.55,
-      "precio_10d": 56.17,
-      "precio_20d": 59.22,
-      "precio_30d": 57.65
+      "precio_caida": 58.2,
+      "precio_10d": 55.84,
+      "precio_20d": 58.87,
+      "precio_30d": 57.31
     },
     {
       "ticker": "XOM",
@@ -369,10 +369,10 @@
       "es_sistematico": 1,
       "tipo_caida": "Sistémica",
       "resultado": "Ganó",
-      "precio_caida": 132.34,
-      "precio_10d": 142.45,
-      "precio_20d": 160.03,
-      "precio_30d": 175.31
+      "precio_caida": 132.19,
+      "precio_10d": 142.28,
+      "precio_20d": 159.84,
+      "precio_30d": 175.11
     },
     {
       "ticker": "GOOGL",
@@ -397,10 +397,10 @@
       "es_sistematico": 1,
       "tipo_caida": "Sistémica",
       "resultado": "Ganó",
-      "precio_caida": 547.03,
-      "precio_10d": 629.28,
-      "precio_20d": 674.4,
-      "precio_30d": 609.07
+      "precio_caida": 546.6,
+      "precio_10d": 628.78,
+      "precio_20d": 673.87,
+      "precio_30d": 608.59
     },
     {
       "ticker": "GOOGL",
