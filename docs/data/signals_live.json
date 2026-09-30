@@ -1,31 +1,14 @@
 {
-  "generated_at": "2026-09-29T01:26:47Z",
-  "market_date": "2026-09-28",
-  "spy_ret_hoy": -0.744,
+  "generated_at": "2026-09-30T01:01:00Z",
+  "market_date": "2026-09-29",
+  "spy_ret_hoy": NaN,
   "prob_umbral": 0.55,
   "stats": {
     "tickers_analizados": 26,
-    "señales_hoy": 1,
+    "señales_hoy": 0,
     "señales_fuertes": 0
   },
-  "signals": [
-    {
-      "ticker": "SLV",
-      "fecha": "2026-09-28",
-      "ret_1d": -5.487,
-      "zscore": -2.207,
-      "prob": 0.477,
-      "es_sistematico": 0,
-      "tipo_caida": "Idiosincrásica",
-      "idio_ret": -4.743,
-      "dist_low_52w": 31.27,
-      "rsi_14": 39.6,
-      "spy_ret": -0.744,
-      "precio_cierre": 54.95,
-      "mag_ord": 3,
-      "recomendacion": "Débil"
-    }
-  ],
+  "signals": [],
   "historico": [
     {
       "ticker": "QQQ",
