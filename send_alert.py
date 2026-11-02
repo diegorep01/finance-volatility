@@ -68,13 +68,20 @@ def enviar_correo(asunto: str, cuerpo: str, intentos: int = 3):
 
     # Gmail SMTP a veces cierra la conexión durante el login desde runners
     # de GitHub Actions (SMTPServerDisconnected intermitente). Reintentamos
-    # con backoff antes de darnos por vencidos (ver incidente 31 oct 2026).
+    # con backoff, alternando SSL 465 / STARTTLS 587 (ver incidente 31 oct
+    # y 2 nov 2026 — SSL 465 falló 2 veces seguidas desde el mismo runner).
     ultimo_error = None
     for intento in range(1, intentos + 1):
         try:
-            with smtplib.SMTP_SSL('smtp.gmail.com', 465, timeout=30) as server:
-                server.login(remitente, password)
-                server.sendmail(remitente, destinatario, msg.as_string())
+            if intento % 2 == 1:
+                with smtplib.SMTP_SSL('smtp.gmail.com', 465, timeout=30) as server:
+                    server.login(remitente, password)
+                    server.sendmail(remitente, destinatario, msg.as_string())
+            else:
+                with smtplib.SMTP('smtp.gmail.com', 587, timeout=30) as server:
+                    server.starttls()
+                    server.login(remitente, password)
+                    server.sendmail(remitente, destinatario, msg.as_string())
             return
         except (smtplib.SMTPServerDisconnected, smtplib.SMTPConnectError, OSError) as e:
             ultimo_error = e
