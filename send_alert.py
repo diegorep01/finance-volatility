@@ -12,6 +12,7 @@ Requiere variables de entorno:
 import json
 import os
 import smtplib
+import time
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from pathlib import Path
@@ -54,7 +55,7 @@ def construir_cuerpo(data: dict) -> str:
     return "\n".join(lineas)
 
 
-def enviar_correo(asunto: str, cuerpo: str):
+def enviar_correo(asunto: str, cuerpo: str, intentos: int = 3):
     remitente   = os.environ['GMAIL_USER']
     destinatario = os.environ['GMAIL_USER']   # te lo mandas a ti mismo
     password    = os.environ['GMAIL_APP_PASSWORD']
@@ -65,9 +66,23 @@ def enviar_correo(asunto: str, cuerpo: str):
     msg['To']      = destinatario
     msg.attach(MIMEText(cuerpo, 'plain', 'utf-8'))
 
-    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
-        server.login(remitente, password)
-        server.sendmail(remitente, destinatario, msg.as_string())
+    # Gmail SMTP a veces cierra la conexión durante el login desde runners
+    # de GitHub Actions (SMTPServerDisconnected intermitente). Reintentamos
+    # con backoff antes de darnos por vencidos (ver incidente 31 oct 2026).
+    ultimo_error = None
+    for intento in range(1, intentos + 1):
+        try:
+            with smtplib.SMTP_SSL('smtp.gmail.com', 465, timeout=30) as server:
+                server.login(remitente, password)
+                server.sendmail(remitente, destinatario, msg.as_string())
+            return
+        except (smtplib.SMTPServerDisconnected, smtplib.SMTPConnectError, OSError) as e:
+            ultimo_error = e
+            print(f'  [alert] Intento {intento}/{intentos} falló: {e!r}')
+            if intento < intentos:
+                time.sleep(5 * intento)
+
+    raise ultimo_error
 
 
 def main():

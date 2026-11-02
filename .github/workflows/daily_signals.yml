@@ -28,12 +28,9 @@ jobs:
       - name: Generar señales del día
         run: python generate_signals.py
 
-      - name: Enviar alerta por email si hay señales fuertes
-        env:
-          GMAIL_USER: ${{ secrets.GMAIL_USER }}
-          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
-        run: python send_alert.py
-
+      # El commit va ANTES del email a propósito: si Gmail falla, los datos
+      # del dashboard no se deben perder (ver incidente 31 oct 2026 — señal
+      # SLV se perdió porque el commit nunca se ejecutó tras el fallo SMTP).
       - name: Commit y push si hay cambios
         run: |
           git config user.name  "github-actions[bot]"
@@ -41,3 +38,9 @@ jobs:
           git add docs/data/signals_live.json
           git diff --staged --quiet || git commit -m "signals: $(date -u '+%Y-%m-%d %H:%M UTC')"
           git push
+
+      - name: Enviar alerta por email si hay señales fuertes
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+        run: python send_alert.py
