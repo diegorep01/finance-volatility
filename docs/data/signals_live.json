@@ -1,14 +1,31 @@
 {
-  "generated_at": "2026-10-30T01:31:43Z",
-  "market_date": "2026-10-29",
-  "spy_ret_hoy": NaN,
+  "generated_at": "2026-11-02T19:56:23Z",
+  "market_date": "2026-11-02",
+  "spy_ret_hoy": -0.209,
   "prob_umbral": 0.55,
   "stats": {
     "tickers_analizados": 26,
-    "señales_hoy": 0,
-    "señales_fuertes": 0
+    "señales_hoy": 1,
+    "señales_fuertes": 1
   },
-  "signals": [],
+  "signals": [
+    {
+      "ticker": "USO",
+      "fecha": "2026-11-02",
+      "ret_1d": -6.32,
+      "zscore": -2.666,
+      "prob": 0.579,
+      "es_sistematico": 0,
+      "tipo_caida": "Idiosincrásica",
+      "idio_ret": -6.111,
+      "dist_low_52w": 139.02,
+      "rsi_14": 50.9,
+      "spy_ret": -0.209,
+      "precio_cierre": 158.16,
+      "mag_ord": 3,
+      "recomendacion": "SEÑAL"
+    }
+  ],
   "historico": [
     {
       "ticker": "QQQ",
