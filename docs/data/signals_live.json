@@ -1,29 +1,29 @@
 {
-  "generated_at": "2026-11-02T19:58:51Z",
+  "generated_at": "2026-11-03T03:16:53Z",
   "market_date": "2026-11-02",
-  "spy_ret_hoy": -0.106,
+  "spy_ret_hoy": -0.479,
   "prob_umbral": 0.55,
   "stats": {
     "tickers_analizados": 26,
     "señales_hoy": 1,
-    "señales_fuertes": 1
+    "señales_fuertes": 0
   },
   "signals": [
     {
       "ticker": "USO",
       "fecha": "2026-11-02",
-      "ret_1d": -6.37,
-      "zscore": -2.683,
-      "prob": 0.578,
+      "ret_1d": -7.084,
+      "zscore": -2.918,
+      "prob": 0.526,
       "es_sistematico": 0,
       "tipo_caida": "Idiosincrásica",
-      "idio_ret": -6.264,
-      "dist_low_52w": 138.89,
-      "rsi_14": 50.8,
-      "spy_ret": -0.106,
-      "precio_cierre": 158.07,
+      "idio_ret": -6.605,
+      "dist_low_52w": 137.07,
+      "rsi_14": 49.4,
+      "spy_ret": -0.479,
+      "precio_cierre": 156.87,
       "mag_ord": 3,
-      "recomendacion": "SEÑAL"
+      "recomendacion": "Débil"
     }
   ],
   "historico": [
