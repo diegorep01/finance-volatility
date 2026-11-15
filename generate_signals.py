@@ -9,6 +9,7 @@ Diseñado para ejecutarse localmente o en GitHub Actions (cron diario).
 """
 
 import json
+import time
 import warnings
 import joblib
 import numpy as np
@@ -66,11 +67,25 @@ def calcular_atr(df, period=14):
 
 # ── Descarga de datos ──────────────────────────────────────────────────────────
 
-def descargar(ticker, periodo='3y'):
-    df = yf.download(ticker, period=periodo, auto_adjust=True, progress=False)
-    if isinstance(df.columns, pd.MultiIndex):
-        df.columns = df.columns.get_level_values(0)
-    return df
+def descargar(ticker, periodo='3y', intentos=4, espera=20):
+    """Descarga con reintentos si la última vela viene incompleta.
+
+    yfinance a veces no tiene el dato EOD asentado justo cuando corre el
+    cron (poco después del cierre) y devuelve un Close NaN en la última
+    fila. Sin este reintento, esa fila se descartaba en silencio más
+    adelante y una caída real (ej. NVDA -9.26% el 5 nov 2026) podía
+    perderse sin dejar rastro en el log.
+    """
+    for intento in range(1, intentos + 1):
+        df = yf.download(ticker, period=periodo, auto_adjust=True, progress=False)
+        if isinstance(df.columns, pd.MultiIndex):
+            df.columns = df.columns.get_level_values(0)
+        if len(df) > 0 and not pd.isna(df['Close'].iloc[-1]):
+            return df
+        print(f'        [{ticker}] último dato incompleto (intento {intento}/{intentos}), reintentando en {espera}s...')
+        if intento < intentos:
+            time.sleep(espera)
+    raise RuntimeError(f'{ticker}: Close de la última vela sigue NaN tras {intentos} intentos')
 
 
 # ── Feature engineering sobre el día más reciente ─────────────────────────────
@@ -245,6 +260,8 @@ def main():
     print('  [2/4] Descargando SPY...')
     spy_df      = descargar('SPY')
     spy_ret_hoy = float(spy_df['Close'].pct_change().iloc[-1] * 100)
+    if pd.isna(spy_ret_hoy):
+        raise RuntimeError('SPY ret hoy sigue NaN tras reintentos — abortando para no exportar un día con datos no confiables')
     fecha_mercado = str(spy_df.index[-1].date())
     print(f'        SPY ret hoy: {spy_ret_hoy:+.2f}%  |  Fecha: {fecha_mercado}')
 
