@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-14T01:57:36Z",
-  "market_date": "2026-11-13",
-  "spy_ret_hoy": -0.363,
+  "generated_at": "2026-11-17T04:18:22Z",
+  "market_date": "2026-11-16",
+  "spy_ret_hoy": -1.912,
   "prob_umbral": 0.55,
   "stats": {
     "tickers_analizados": 26,
@@ -159,10 +159,10 @@
       "es_sistematico": 0,
       "tipo_caida": "Idiosincrásica",
       "resultado": "No ganó",
-      "precio_caida": 155.27,
-      "precio_10d": 151.06,
-      "precio_20d": 136.92,
-      "precio_30d": 135.56
+      "precio_caida": 154.3,
+      "precio_10d": 150.11,
+      "precio_20d": 136.06,
+      "precio_30d": 134.71
     },
     {
       "ticker": "SLV",
@@ -187,10 +187,10 @@
       "es_sistematico": 0,
       "tipo_caida": "Idiosincrásica",
       "resultado": "Ganó",
-      "precio_caida": 146.74,
-      "precio_10d": 155.27,
-      "precio_20d": 151.06,
-      "precio_30d": 136.92
+      "precio_caida": 145.82,
+      "precio_10d": 154.3,
+      "precio_20d": 150.11,
+      "precio_30d": 136.06
     },
     {
       "ticker": "XLE",
@@ -257,10 +257,10 @@
       "es_sistematico": 0,
       "tipo_caida": "Idiosincrásica",
       "resultado": "Ganó",
-      "precio_caida": 144.52,
-      "precio_10d": 150.74,
-      "precio_20d": 156.9,
-      "precio_30d": 148.42
+      "precio_caida": 143.61,
+      "precio_10d": 149.8,
+      "precio_20d": 155.92,
+      "precio_30d": 147.49
     },
     {
       "ticker": "USO",
@@ -299,10 +299,10 @@
       "es_sistematico": 0,
       "tipo_caida": "Idiosincrásica",
       "resultado": "No ganó",
-      "precio_caida": 154.17,
-      "precio_10d": 147.54,
-      "precio_20d": 146.74,
-      "precio_30d": 155.27
+      "precio_caida": 153.2,
+      "precio_10d": 146.61,
+      "precio_20d": 145.82,
+      "precio_30d": 154.3
     },
     {
       "ticker": "WMT",
@@ -355,10 +355,10 @@
       "es_sistematico": 0,
       "tipo_caida": "Idiosincrásica",
       "resultado": "No ganó",
-      "precio_caida": 158.67,
-      "precio_10d": 149.98,
-      "precio_20d": 152.3,
-      "precio_30d": 150.77
+      "precio_caida": 157.67,
+      "precio_10d": 149.04,
+      "precio_20d": 151.35,
+      "precio_30d": 149.83
     },
     {
       "ticker": "XLK",
