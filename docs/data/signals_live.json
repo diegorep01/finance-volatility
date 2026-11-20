@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-19T02:55:29Z",
-  "market_date": "2026-11-18",
-  "spy_ret_hoy": -0.306,
+  "generated_at": "2026-11-20T02:51:18Z",
+  "market_date": "2026-11-19",
+  "spy_ret_hoy": -1.962,
   "prob_umbral": 0.55,
   "stats": {
     "tickers_analizados": 26,
@@ -117,10 +117,10 @@
       "es_sistematico": 0,
       "tipo_caida": "Idiosincrásica",
       "resultado": "No ganó",
-      "precio_caida": 440.48,
-      "precio_10d": 393.09,
-      "precio_20d": 383.56,
-      "precio_30d": 400.35
+      "precio_caida": 439.63,
+      "precio_10d": 392.33,
+      "precio_20d": 382.82,
+      "precio_30d": 399.57
     },
     {
       "ticker": "AMZN",
@@ -215,10 +215,10 @@
       "es_sistematico": 0,
       "tipo_caida": "Idiosincrásica",
       "resultado": "Ganó",
-      "precio_caida": 610.86,
-      "precio_10d": 617.37,
-      "precio_20d": 631.43,
-      "precio_30d": 566.01
+      "precio_caida": null,
+      "precio_10d": null,
+      "precio_20d": null,
+      "precio_30d": null
     },
     {
       "ticker": "MSFT",
@@ -229,10 +229,10 @@
       "es_sistematico": 0,
       "tipo_caida": "Idiosincrásica",
       "resultado": "No ganó",
-      "precio_caida": 406.13,
-      "precio_10d": 407.78,
-      "precio_20d": 449.39,
-      "precio_30d": 390.01
+      "precio_caida": 405.35,
+      "precio_10d": 406.99,
+      "precio_20d": 448.53,
+      "precio_30d": 389.25
     },
     {
       "ticker": "USO",
@@ -397,10 +397,10 @@
       "es_sistematico": 1,
       "tipo_caida": "Sistémica",
       "resultado": "Ganó",
-      "precio_caida": 546.6,
-      "precio_10d": 628.78,
-      "precio_20d": 673.87,
-      "precio_30d": 608.59
+      "precio_caida": null,
+      "precio_10d": null,
+      "precio_20d": null,
+      "precio_30d": null
     },
     {
       "ticker": "GOOGL",
