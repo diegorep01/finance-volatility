@@ -1,24 +1,34 @@
 """
 send_alert.py
 =============
-Lee docs/data/signals_live.json y envía un correo si hay señales fuertes
-(prob >= PROB_UMBRAL). Diseñado para ejecutarse desde GitHub Actions.
+Lee docs/data/signals_live.json y envía una alerta por Telegram si hay
+señales fuertes (prob >= PROB_UMBRAL). Diseñado para ejecutarse desde
+GitHub Actions.
 
 Requiere variables de entorno:
-  GMAIL_USER         — tu dirección Gmail (ej. usuario@gmail.com)
-  GMAIL_APP_PASSWORD — App Password de 16 caracteres generada en myaccount.google.com
+  TELEGRAM_BOT_TOKEN — token del bot (de @BotFather)
+  TELEGRAM_CHAT_ID    — chat_id de Diego
+
+Reemplaza al envío por Gmail (obsoleto desde 25 nov 2026 — ver incidente
+21 nov: Gmail cerró la conexión en las 3 reintentos, 4 señales reales
+nunca llegaron). Telegram es más fiable para este caso de uso y además
+añade "catch-up": si el envío falla, la alerta queda en
+docs/data/alert_state.json y se reintenta en el SIGUIENTE run (no solo
+dentro del mismo run), hasta un máximo de ALERTA_MAX_EDAD_DIAS días.
 """
 
 import json
 import os
-import smtplib
 import time
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+import urllib.request
+import urllib.error
+from datetime import date, datetime
 from pathlib import Path
 
-JSON_PATH  = Path('docs/data/signals_live.json')
-PROB_UMBRAL = 0.55
+SIGNALS_PATH = Path('docs/data/signals_live.json')
+STATE_PATH   = Path('docs/data/alert_state.json')
+PROB_UMBRAL  = 0.55
+ALERTA_MAX_EDAD_DIAS = 5   # pasado este umbral, se descarta una pendiente (ya no es accionable)
 
 
 def construir_cuerpo(data: dict) -> str:
@@ -27,90 +37,116 @@ def construir_cuerpo(data: dict) -> str:
     spy     = data.get('spy_ret_hoy', 0)
 
     lineas = [
-        f"Finance Volatility Check — {fecha}",
+        f"📈 *Finance Volatility Check* — {fecha}",
         f"SPY hoy: {spy:+.2f}%",
         "",
-        f"{'='*45}",
-        f"  {len(signals)} SEÑAL(ES) DETECTADA(S)",
-        f"{'='*45}",
+        f"*{len(signals)} SEÑAL(ES) DETECTADA(S)*",
         "",
     ]
 
     for s in signals:
-        tipo  = s.get('tipo_caida', '—')
+        tipo = s.get('tipo_caida', '—')
         lineas += [
-            f"  TICKER : {s['ticker']}",
-            f"  Caída  : {s['ret_1d']:+.2f}%   Z-score: {s['zscore']:.2f}",
-            f"  Prob.  : {s['prob']:.0%}   Tipo: {tipo}",
-            f"  Precio : ${s.get('precio_cierre', '—')}   RSI-14: {s.get('rsi_14', '—')}",
+            f"*{s['ticker']}*",
+            f"  Caída: {s['ret_1d']:+.2f}%   Z-score: {s['zscore']:.2f}",
+            f"  Prob: {s['prob']:.0%}   Tipo: {tipo}",
+            f"  Precio: ${s.get('precio_cierre', '—')}   RSI-14: {s.get('rsi_14', '—')}",
             "",
         ]
 
     lineas += [
-        "---",
         "Estrategia ganadora: caída < -4.5%, Z < -2.0, horizonte 10 días hábiles.",
-        "Dashboard:  https://diegorep01.github.io/finance-volatility/",
+        "Dashboard: https://diegorep01.github.io/finance-volatility/",
     ]
 
     return "\n".join(lineas)
 
 
-def enviar_correo(asunto: str, cuerpo: str, intentos: int = 3):
-    remitente   = os.environ['GMAIL_USER']
-    destinatario = os.environ['GMAIL_USER']   # te lo mandas a ti mismo
-    password    = os.environ['GMAIL_APP_PASSWORD']
+def enviar_telegram(texto: str, intentos: int = 3) -> bool:
+    token   = os.environ.get('TELEGRAM_BOT_TOKEN')
+    chat_id = os.environ.get('TELEGRAM_CHAT_ID')
+    if not token or not chat_id:
+        print('  [alert] TELEGRAM_BOT_TOKEN/TELEGRAM_CHAT_ID no configurados todavía — se deja pendiente.')
+        return False
+    url     = f'https://api.telegram.org/bot{token}/sendMessage'
+    payload = json.dumps({
+        'chat_id': chat_id,
+        'text': texto,
+        'parse_mode': 'Markdown',
+    }).encode('utf-8')
 
-    msg = MIMEMultipart('alternative')
-    msg['Subject'] = asunto
-    msg['From']    = remitente
-    msg['To']      = destinatario
-    msg.attach(MIMEText(cuerpo, 'plain', 'utf-8'))
-
-    # Gmail SMTP a veces cierra la conexión durante el login desde runners
-    # de GitHub Actions (SMTPServerDisconnected intermitente). Reintentamos
-    # con backoff, alternando SSL 465 / STARTTLS 587 (ver incidente 31 oct
-    # y 2 nov 2026 — SSL 465 falló 2 veces seguidas desde el mismo runner).
-    ultimo_error = None
     for intento in range(1, intentos + 1):
         try:
-            if intento % 2 == 1:
-                with smtplib.SMTP_SSL('smtp.gmail.com', 465, timeout=30) as server:
-                    server.login(remitente, password)
-                    server.sendmail(remitente, destinatario, msg.as_string())
-            else:
-                with smtplib.SMTP('smtp.gmail.com', 587, timeout=30) as server:
-                    server.starttls()
-                    server.login(remitente, password)
-                    server.sendmail(remitente, destinatario, msg.as_string())
-            return
-        except (smtplib.SMTPServerDisconnected, smtplib.SMTPConnectError, OSError) as e:
-            ultimo_error = e
+            req = urllib.request.Request(
+                url, data=payload, headers={'Content-Type': 'application/json'}
+            )
+            with urllib.request.urlopen(req, timeout=20) as resp:
+                resp.read()
+            return True
+        except (urllib.error.URLError, urllib.error.HTTPError, OSError) as e:
             print(f'  [alert] Intento {intento}/{intentos} falló: {e!r}')
             if intento < intentos:
                 time.sleep(5 * intento)
 
-    raise ultimo_error
+    return False
+
+
+def cargar_estado() -> dict:
+    if not STATE_PATH.exists():
+        return {'pendientes': []}
+    return json.loads(STATE_PATH.read_text(encoding='utf-8'))
+
+
+def guardar_estado(estado: dict):
+    STATE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    STATE_PATH.write_text(json.dumps(estado, ensure_ascii=False, indent=2), encoding='utf-8')
+
+
+def dias_desde(fecha_iso: str) -> int:
+    try:
+        return (date.today() - date.fromisoformat(fecha_iso)).days
+    except ValueError:
+        return 0
 
 
 def main():
-    if not JSON_PATH.exists():
-        print('  [alert] JSON no encontrado — nada que enviar.')
-        return
+    estado = cargar_estado()
+    pendientes = estado.get('pendientes', [])
 
-    data    = json.loads(JSON_PATH.read_text(encoding='utf-8'))
-    signals = [s for s in data.get('signals', []) if s['recomendacion'] == 'SEÑAL']
+    # 1) Reintentar primero cualquier alerta de un run anterior que no se pudo enviar.
+    siguen_pendientes = []
+    for p in pendientes:
+        if dias_desde(p['fecha']) > ALERTA_MAX_EDAD_DIAS:
+            print(f"  [alert] Descartando pendiente vieja ({p['fecha']}) — ya no es accionable.")
+            continue
+        texto = f"⏳ *Alerta pendiente del {p['fecha']} (reenviada)*\n\n{p['cuerpo']}"
+        print(f"  [alert] Reintentando pendiente del {p['fecha']}...")
+        if enviar_telegram(texto):
+            print('  [alert] Pendiente enviada correctamente.')
+        else:
+            siguen_pendientes.append(p)
 
-    if not signals:
-        print(f'  [alert] Sin señales fuertes hoy ({data.get("market_date")}) — no se envía correo.')
-        return
+    # 2) Procesar la señal de hoy (si hay).
+    nuevas_pendientes = siguen_pendientes
+    if SIGNALS_PATH.exists():
+        data    = json.loads(SIGNALS_PATH.read_text(encoding='utf-8'))
+        signals = [s for s in data.get('signals', []) if s['recomendacion'] == 'SEÑAL']
 
-    fecha  = data.get('market_date', '—')
-    asunto = f'[Finance] {len(signals)} señal(es) detectada(s) — {fecha}'
-    cuerpo = construir_cuerpo(data)
+        if signals:
+            fecha  = data.get('market_date', date.today().isoformat())
+            cuerpo = construir_cuerpo(data)
+            print(f'  [alert] Enviando alerta Telegram: {len(signals)} señal(es) — {fecha}')
+            if enviar_telegram(cuerpo):
+                print('  [alert] Alerta enviada correctamente por Telegram.')
+            else:
+                print('  [alert] Falló el envío — queda guardada para reintentar en el próximo run.')
+                nuevas_pendientes.append({'fecha': fecha, 'cuerpo': cuerpo})
+        else:
+            print(f'  [alert] Sin señales fuertes hoy ({data.get("market_date")}).')
+    else:
+        print('  [alert] JSON de señales no encontrado — nada que procesar hoy.')
 
-    print(f'  [alert] Enviando correo: {asunto}')
-    enviar_correo(asunto, cuerpo)
-    print('  [alert] Correo enviado correctamente.')
+    guardar_estado({'pendientes': nuevas_pendientes, 'ultima_ejecucion': datetime.utcnow().isoformat()})
 
 
 if __name__ == '__main__':
