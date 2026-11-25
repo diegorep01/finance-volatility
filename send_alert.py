@@ -52,10 +52,13 @@ def enviar_telegram(texto: str, intentos: int = 3) -> bool:
         print('  [alert] TELEGRAM_BOT_TOKEN/TELEGRAM_CHAT_ID no configurados todavía — se deja pendiente.')
         return False
     url     = f'https://api.telegram.org/bot{token}/sendMessage'
+    # Sin parse_mode: el Markdown "legacy" de Telegram es muy frágil con
+    # texto generado dinámicamente (rompe con asteriscos/paréntesis sueltos,
+    # ver incidente 25 nov 2026 — "can't parse entities"). Texto plano es
+    # más robusto para este caso de uso.
     payload = json.dumps({
         'chat_id': chat_id,
         'text': texto,
-        'parse_mode': 'Markdown',
     }).encode('utf-8')
 
     for intento in range(1, intentos + 1):
@@ -138,17 +141,17 @@ def construir_cuerpo_compra(data: dict) -> str:
     spy     = data.get('spy_ret_hoy', 0)
 
     lineas = [
-        f"📈 *Finance Volatility Check* — {fecha}",
+        f"📈 Finance Volatility Check — {fecha}",
         f"SPY hoy: {spy:+.2f}%",
         "",
-        f"*{len(signals)} SEÑAL(ES) DETECTADA(S)*",
+        f"{len(signals)} SEÑAL(ES) DETECTADA(S)",
         "",
     ]
 
     for s in signals:
         tipo = s.get('tipo_caida', '—')
         lineas += [
-            f"*{s['ticker']}*",
+            f"{s['ticker']}",
             f"  Caída: {s['ret_1d']:+.2f}%   Z-score: {s['zscore']:.2f}",
             f"  Prob: {s['prob']:.0%}   Tipo: {tipo}",
             f"  Precio: ${s.get('precio_cierre', '—')}   RSI-14: {s.get('rsi_14', '—')}",
@@ -166,9 +169,9 @@ def construir_cuerpo_compra(data: dict) -> str:
 
 def construir_cuerpo_recordatorio(pos: dict) -> str:
     return (
-        f"🔔 *Recordatorio de salida* — {pos['ticker']}\n\n"
+        f"🔔 Recordatorio de salida — {pos['ticker']}\n\n"
         f"Entrada: {pos['fecha_entrada']}\n"
-        f"*Mañana ({pos['fecha_salida']}) se cumplen los {HORIZONTE_DIAS_HABILES} días hábiles.*\n"
+        f"Mañana ({pos['fecha_salida']}) se cumplen los {HORIZONTE_DIAS_HABILES} días hábiles.\n"
         f"Si entraste en esta señal, mañana toca cerrar/evaluar la posición."
     )
 
@@ -187,7 +190,7 @@ def main():
         if dias_desde(p['fecha']) > ALERTA_MAX_EDAD_DIAS:
             print(f"  [alert] Descartando pendiente vieja ({p['fecha']}) — ya no es accionable.")
             continue
-        texto = f"⏳ *Pendiente del {p['fecha']} (reenviada)*\n\n{p['cuerpo']}"
+        texto = f"⏳ Pendiente del {p['fecha']} (reenviada)\n\n{p['cuerpo']}"
         print(f"  [alert] Reintentando pendiente del {p['fecha']}...")
         if enviar_telegram(texto):
             print('  [alert] Pendiente enviada correctamente.')
