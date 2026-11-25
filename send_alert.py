@@ -1,20 +1,29 @@
 """
 send_alert.py
 =============
-Lee docs/data/signals_live.json y envía una alerta por Telegram si hay
-señales fuertes (prob >= PROB_UMBRAL). Diseñado para ejecutarse desde
-GitHub Actions.
+Lee docs/data/signals_live.json y envía por Telegram:
+  1) Alerta de COMPRA cuando hay señales fuertes (prob >= PROB_UMBRAL).
+  2) Recordatorio de SALIDA un día hábil antes de que se cumplan los
+     HORIZONTE_DIAS_HABILES (10) días desde la entrada (D+1 open tras la
+     señal), para cada señal que se haya alertado antes.
+
+Diseñado para ejecutarse desde GitHub Actions, una vez al día.
 
 Requiere variables de entorno:
   TELEGRAM_BOT_TOKEN — token del bot (de @BotFather)
   TELEGRAM_CHAT_ID    — chat_id de Diego
 
 Reemplaza al envío por Gmail (obsoleto desde 25 nov 2026 — ver incidente
-21 nov: Gmail cerró la conexión en las 3 reintentos, 4 señales reales
-nunca llegaron). Telegram es más fiable para este caso de uso y además
-añade "catch-up": si el envío falla, la alerta queda en
+21 nov: Gmail cerró la conexión en los 3 reintentos, 4 señales reales
+nunca llegaron). Ambos tipos de mensaje comparten el mismo mecanismo de
+"catch-up": si el envío falla, el mensaje queda en
 docs/data/alert_state.json y se reintenta en el SIGUIENTE run (no solo
 dentro del mismo run), hasta un máximo de ALERTA_MAX_EDAD_DIAS días.
+
+Nota: el horizonte de 10 días se cuenta en días hábiles de calendario
+(lunes-viernes), sin calendario de festivos NYSE — es una aproximación
+razonable para un recordatorio, no para el backtest (que ya usa el
+índice real de trading days de yfinance).
 """
 
 import json
@@ -22,45 +31,19 @@ import os
 import time
 import urllib.request
 import urllib.error
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
-SIGNALS_PATH = Path('docs/data/signals_live.json')
-STATE_PATH   = Path('docs/data/alert_state.json')
-PROB_UMBRAL  = 0.55
-ALERTA_MAX_EDAD_DIAS = 5   # pasado este umbral, se descarta una pendiente (ya no es accionable)
+SIGNALS_PATH    = Path('docs/data/signals_live.json')
+STATE_PATH      = Path('docs/data/alert_state.json')
+POSICIONES_PATH = Path('docs/data/posiciones_abiertas.json')
+
+PROB_UMBRAL           = 0.55
+HORIZONTE_DIAS_HABILES = 10
+ALERTA_MAX_EDAD_DIAS  = 5   # pasado este umbral, se descarta una pendiente (ya no es accionable)
 
 
-def construir_cuerpo(data: dict) -> str:
-    signals = [s for s in data.get('signals', []) if s['recomendacion'] == 'SEÑAL']
-    fecha   = data.get('market_date', '—')
-    spy     = data.get('spy_ret_hoy', 0)
-
-    lineas = [
-        f"📈 *Finance Volatility Check* — {fecha}",
-        f"SPY hoy: {spy:+.2f}%",
-        "",
-        f"*{len(signals)} SEÑAL(ES) DETECTADA(S)*",
-        "",
-    ]
-
-    for s in signals:
-        tipo = s.get('tipo_caida', '—')
-        lineas += [
-            f"*{s['ticker']}*",
-            f"  Caída: {s['ret_1d']:+.2f}%   Z-score: {s['zscore']:.2f}",
-            f"  Prob: {s['prob']:.0%}   Tipo: {tipo}",
-            f"  Precio: ${s.get('precio_cierre', '—')}   RSI-14: {s.get('rsi_14', '—')}",
-            "",
-        ]
-
-    lineas += [
-        "Estrategia ganadora: caída < -4.5%, Z < -2.0, horizonte 10 días hábiles.",
-        "Dashboard: https://diegorep01.github.io/finance-volatility/",
-    ]
-
-    return "\n".join(lineas)
-
+# ---------------------------------------------------------------- Telegram --
 
 def enviar_telegram(texto: str, intentos: int = 3) -> bool:
     token   = os.environ.get('TELEGRAM_BOT_TOKEN')
@@ -91,15 +74,53 @@ def enviar_telegram(texto: str, intentos: int = 3) -> bool:
     return False
 
 
-def cargar_estado() -> dict:
-    if not STATE_PATH.exists():
-        return {'pendientes': []}
-    return json.loads(STATE_PATH.read_text(encoding='utf-8'))
+def intentar_o_encolar(texto: str, fecha: str, pendientes: list):
+    """Envía ya mismo; si falla, lo deja en la cola de catch-up."""
+    if enviar_telegram(texto):
+        return True
+    pendientes.append({'fecha': fecha, 'cuerpo': texto})
+    return False
 
 
-def guardar_estado(estado: dict):
-    STATE_PATH.parent.mkdir(parents=True, exist_ok=True)
-    STATE_PATH.write_text(json.dumps(estado, ensure_ascii=False, indent=2), encoding='utf-8')
+# -------------------------------------------------------------- Días hábiles --
+
+def es_habil(d: date) -> bool:
+    return d.weekday() < 5  # 0=lunes ... 6=domingo
+
+
+def siguiente_dia_habil(d: date) -> date:
+    d = d + timedelta(days=1)
+    while not es_habil(d):
+        d += timedelta(days=1)
+    return d
+
+
+def dia_habil_anterior(d: date) -> date:
+    d = d - timedelta(days=1)
+    while not es_habil(d):
+        d -= timedelta(days=1)
+    return d
+
+
+def sumar_dias_habiles(d: date, n: int) -> date:
+    while n > 0:
+        d = d + timedelta(days=1)
+        if es_habil(d):
+            n -= 1
+    return d
+
+
+# -------------------------------------------------------------------- Estado --
+
+def cargar_json(path: Path, default):
+    if not path.exists():
+        return default
+    return json.loads(path.read_text(encoding='utf-8'))
+
+
+def guardar_json(path: Path, data):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding='utf-8')
 
 
 def dias_desde(fecha_iso: str) -> int:
@@ -109,44 +130,125 @@ def dias_desde(fecha_iso: str) -> int:
         return 0
 
 
-def main():
-    estado = cargar_estado()
-    pendientes = estado.get('pendientes', [])
+# ------------------------------------------------------------------- Mensajes --
 
-    # 1) Reintentar primero cualquier alerta de un run anterior que no se pudo enviar.
+def construir_cuerpo_compra(data: dict) -> str:
+    signals = [s for s in data.get('signals', []) if s['recomendacion'] == 'SEÑAL']
+    fecha   = data.get('market_date', '—')
+    spy     = data.get('spy_ret_hoy', 0)
+
+    lineas = [
+        f"📈 *Finance Volatility Check* — {fecha}",
+        f"SPY hoy: {spy:+.2f}%",
+        "",
+        f"*{len(signals)} SEÑAL(ES) DETECTADA(S)*",
+        "",
+    ]
+
+    for s in signals:
+        tipo = s.get('tipo_caida', '—')
+        lineas += [
+            f"*{s['ticker']}*",
+            f"  Caída: {s['ret_1d']:+.2f}%   Z-score: {s['zscore']:.2f}",
+            f"  Prob: {s['prob']:.0%}   Tipo: {tipo}",
+            f"  Precio: ${s.get('precio_cierre', '—')}   RSI-14: {s.get('rsi_14', '—')}",
+            "",
+        ]
+
+    lineas += [
+        "Estrategia ganadora: caída < -4.5%, Z < -2.0, horizonte 10 días hábiles.",
+        "Regla validada: entra al Open D+1 o no entres (ver Seguimiento_FVC).",
+        "Dashboard: https://diegorep01.github.io/finance-volatility/",
+    ]
+
+    return "\n".join(lineas)
+
+
+def construir_cuerpo_recordatorio(pos: dict) -> str:
+    return (
+        f"🔔 *Recordatorio de salida* — {pos['ticker']}\n\n"
+        f"Entrada: {pos['fecha_entrada']}\n"
+        f"*Mañana ({pos['fecha_salida']}) se cumplen los {HORIZONTE_DIAS_HABILES} días hábiles.*\n"
+        f"Si entraste en esta señal, mañana toca cerrar/evaluar la posición."
+    )
+
+
+# ----------------------------------------------------------------------- Main --
+
+def main():
+    estado     = cargar_json(STATE_PATH, {'pendientes': []})
+    pendientes = estado.get('pendientes', [])
+    posiciones = cargar_json(POSICIONES_PATH, [])
+    hoy        = date.today()
+
+    # 1) Reintentar primero cualquier mensaje de un run anterior que no se pudo enviar.
     siguen_pendientes = []
     for p in pendientes:
         if dias_desde(p['fecha']) > ALERTA_MAX_EDAD_DIAS:
             print(f"  [alert] Descartando pendiente vieja ({p['fecha']}) — ya no es accionable.")
             continue
-        texto = f"⏳ *Alerta pendiente del {p['fecha']} (reenviada)*\n\n{p['cuerpo']}"
+        texto = f"⏳ *Pendiente del {p['fecha']} (reenviada)*\n\n{p['cuerpo']}"
         print(f"  [alert] Reintentando pendiente del {p['fecha']}...")
         if enviar_telegram(texto):
             print('  [alert] Pendiente enviada correctamente.')
         else:
             siguen_pendientes.append(p)
+    pendientes = siguen_pendientes
 
-    # 2) Procesar la señal de hoy (si hay).
-    nuevas_pendientes = siguen_pendientes
+    # 2) Señal de compra de hoy (si hay) + registrar posición para su recordatorio de salida.
     if SIGNALS_PATH.exists():
         data    = json.loads(SIGNALS_PATH.read_text(encoding='utf-8'))
         signals = [s for s in data.get('signals', []) if s['recomendacion'] == 'SEÑAL']
+        fecha_senal = data.get('market_date', hoy.isoformat())
 
         if signals:
-            fecha  = data.get('market_date', date.today().isoformat())
-            cuerpo = construir_cuerpo(data)
-            print(f'  [alert] Enviando alerta Telegram: {len(signals)} señal(es) — {fecha}')
-            if enviar_telegram(cuerpo):
-                print('  [alert] Alerta enviada correctamente por Telegram.')
+            cuerpo = construir_cuerpo_compra(data)
+            print(f'  [alert] Enviando alerta de compra: {len(signals)} señal(es) — {fecha_senal}')
+            if intentar_o_encolar(cuerpo, fecha_senal, pendientes):
+                print('  [alert] Alerta de compra enviada.')
             else:
-                print('  [alert] Falló el envío — queda guardada para reintentar en el próximo run.')
-                nuevas_pendientes.append({'fecha': fecha, 'cuerpo': cuerpo})
+                print('  [alert] Falló el envío — queda en cola para el próximo run.')
+
+            fecha_senal_d = date.fromisoformat(fecha_senal)
+            entrada = siguiente_dia_habil(fecha_senal_d)
+            salida  = sumar_dias_habiles(entrada, HORIZONTE_DIAS_HABILES)
+            for s in signals:
+                ya_existe = any(
+                    p['ticker'] == s['ticker'] and p['fecha_entrada'] == entrada.isoformat()
+                    for p in posiciones
+                )
+                if not ya_existe:
+                    posiciones.append({
+                        'ticker': s['ticker'],
+                        'fecha_senal': fecha_senal,
+                        'fecha_entrada': entrada.isoformat(),
+                        'fecha_salida': salida.isoformat(),
+                        'avisado_salida': False,
+                    })
         else:
-            print(f'  [alert] Sin señales fuertes hoy ({data.get("market_date")}).')
+            print(f'  [alert] Sin señales fuertes hoy ({fecha_senal}).')
     else:
         print('  [alert] JSON de señales no encontrado — nada que procesar hoy.')
 
-    guardar_estado({'pendientes': nuevas_pendientes, 'ultima_ejecucion': datetime.utcnow().isoformat()})
+    # 3) Recordatorios de salida: un día hábil antes de fecha_salida.
+    posiciones_vigentes = []
+    for pos in posiciones:
+        fecha_salida = date.fromisoformat(pos['fecha_salida'])
+
+        if not pos['avisado_salida'] and dia_habil_anterior(fecha_salida) == hoy:
+            texto = construir_cuerpo_recordatorio(pos)
+            print(f"  [alert] Enviando recordatorio de salida: {pos['ticker']} (sale {pos['fecha_salida']})")
+            if intentar_o_encolar(texto, hoy.isoformat(), pendientes):
+                pos['avisado_salida'] = True
+            else:
+                print('  [alert] Falló el envío del recordatorio — queda en cola para el próximo run.')
+
+        # Se descarta la posición un par de días después de la salida (ya no es relevante).
+        if fecha_salida >= hoy - timedelta(days=2):
+            posiciones_vigentes.append(pos)
+
+    guardar_json(STATE_PATH, {'pendientes': pendientes, 'ultima_ejecucion': datetime.utcnow().isoformat()})
+    guardar_json(POSICIONES_PATH, posiciones_vigentes)
 
 
 if __name__ == '__main__':
